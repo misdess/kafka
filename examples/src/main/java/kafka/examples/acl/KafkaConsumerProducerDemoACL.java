@@ -5,26 +5,26 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kafka.examples;
+package kafka.examples.acl;
 
-public class KafkaProperties {
-    public static final String TOPIC = "topic";
-    public static final String KAFKA_SERVER_URL = "localhost";
-    public static final int KAFKA_SERVER_PORT = 9092;
-    public static final int KAFKA_PRODUCER_BUFFER_SIZE = 64 * 1024;
-    public static final int CONNECTION_TIMEOUT = 100000;
-    public static final String TOPIC2 = "topic2";
-    public static final String TOPIC3 = "topic3";
-    public static final String CLIENT_ID = "SimpleConsumerDemoClient";
 
-    private KafkaProperties() {}
+public class KafkaConsumerProducerDemoACL {
+    public static void main(String[] args) {
+        boolean isAsync = args.length == 0 || !args[0].trim().toLowerCase().equals("sync");
+        ProducerACL producerThread = new ProducerACL(KafkaPropertiesACL.TOPIC, isAsync);
+        producerThread.start();
+
+        ConsumerACL consumerThread = new ConsumerACL(KafkaPropertiesACL.TOPIC);
+        consumerThread.start();
+
+    }
 }

@@ -14,29 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kafka.examples;
+package kafka.examples.acl;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.clients.CommonClientConfigs;
+import org.apache.kafka.common.config.SslConfigs;
 
-public class Producer extends Thread {
+public class ProducerACL extends Thread {
     private final KafkaProducer<Integer, String> producer;
     private final String topic;
     private final Boolean isAsync;
 
-    public Producer(String topic, Boolean isAsync) {
+    public ProducerACL(String topic, Boolean isAsync) {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", "localhost:9096");
         props.put("client.id", "DemoProducer");
         props.put("key.serializer", "org.apache.kafka.common.serialization.IntegerSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        
+        //configure the ssl parameters
+        props.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+        props.setProperty(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, "/var/private/client/kafka.client.truststore.jks");
+        props.setProperty(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "kafka1");
+        props.setProperty(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "kafka1");        
+        props.setProperty(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, "/var/private/client/kafka.client.keystore.jks");
+        props.setProperty(SslConfigs.SSL_KEY_PASSWORD_CONFIG, "kafka1");
+        
         producer = new KafkaProducer<>(props);
         this.topic = topic;
         this.isAsync = isAsync;
@@ -63,7 +72,7 @@ public class Producer extends Thread {
             }
             ++messageNo;
         }
-    } 
+    }
 }
 
 class DemoCallBack implements Callback {

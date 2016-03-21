@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kafka.examples;
+package kafka.examples.acl;
 
-public class KafkaProperties {
-    public static final String TOPIC = "topic";
+public class KafkaPropertiesACL {
+    public static final String TOPIC = "sics1";
     public static final String KAFKA_SERVER_URL = "localhost";
-    public static final int KAFKA_SERVER_PORT = 9092;
+    public static final int KAFKA_SERVER_PORT = 9096;
     public static final int KAFKA_PRODUCER_BUFFER_SIZE = 64 * 1024;
     public static final int CONNECTION_TIMEOUT = 100000;
     public static final String TOPIC2 = "topic2";
     public static final String TOPIC3 = "topic3";
     public static final String CLIENT_ID = "SimpleConsumerDemoClient";
 
-    private KafkaProperties() {}
+    private KafkaPropertiesACL() {}
 }
